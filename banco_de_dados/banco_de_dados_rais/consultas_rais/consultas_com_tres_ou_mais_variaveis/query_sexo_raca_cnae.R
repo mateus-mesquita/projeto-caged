@@ -1,4 +1,4 @@
-query_sexo_raca_cnae_rais <- function(ano,sexo,raca,cnae) {
+consulta_sexo_raca_cnae_rais <- function(ano,sexo,raca,cnae) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 
