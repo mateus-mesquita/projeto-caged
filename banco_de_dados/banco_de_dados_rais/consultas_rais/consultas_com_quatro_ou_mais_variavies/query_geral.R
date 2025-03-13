@@ -3,9 +3,9 @@ library(bigrquery)
 library(basedosdados)
 library(glue)
 
-query_geral_rais <- function(ano) {
+consulta_geral_rais <- function(ano) {
     # Defina o seu projeto no Google Cloud
-    projeyo_id <- "utility-emblem-409417"
+    projeto_id <- "utility-emblem-409417"
 
     # Para carregar o dado direto no R
     query <- glue("
@@ -58,6 +58,6 @@ LEFT JOIN `dicionario_raca_cor`
     where ano = {ano};
 ")
 
-    resultado <- read_sql(query, set_billing_id)
+    resultado <- read_sql(query, set_billing_id=projeto_id)
     return(resultado[[1]])
 }

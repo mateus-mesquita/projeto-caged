@@ -1,5 +1,5 @@
 
-consulta_estado_gdi_rais <- function(ano, uf) {
+consulta_estado_gdi_rais <- function(ano, uf, gdi) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 

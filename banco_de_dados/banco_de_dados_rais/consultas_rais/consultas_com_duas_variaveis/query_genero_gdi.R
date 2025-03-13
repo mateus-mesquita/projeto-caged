@@ -1,5 +1,5 @@
 
-consulta_sexo_rais <- function(ano, sexo) {
+consulta_sexo_gdi_rais <- function(ano, sexo,gdi) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 

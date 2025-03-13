@@ -1,5 +1,5 @@
 
-query_grau_de_instrucao_cnae_rais <- function(ano,gdi,cnae) {
+consulta_grau_de_instrucao_cnae_rais <- function(ano,gdi,cnae) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 

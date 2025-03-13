@@ -1,5 +1,5 @@
 
-query_estado_raca_gdi_cnae_rais <- function(ano,uf,raca,gdi,cnae) {
+consulta_estado_raca_gdi_cnae_rais <- function(ano,uf,raca,gdi,cnae) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 

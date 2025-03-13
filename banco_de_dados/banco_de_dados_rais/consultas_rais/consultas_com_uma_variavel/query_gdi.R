@@ -1,5 +1,5 @@
 
-query_grau_de_instrucao <- function(ano,gdi) {
+consulta_grau_de_instrucao <- function(ano,gdi) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 
