@@ -1,5 +1,4 @@
-
-consulta_sexo_grau_de_instrucao_cnae_rais <- function(ano,sexo,gdi,cnae) {
+query_sexo_raca_cnae_rais <- function(ano,sexo,raca,cnae) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 
@@ -53,10 +52,9 @@ LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
     AND dicionario_sexo.descricao_sexo = '{sexo}'
-    AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}'
+    AND dicionario_raca_cor.descricao_raca_cor = '{raca}'
     AND diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
 ")
-
     resultado <- read_sql(query, set_billing_id=projeto_id)
     return(resultado[[1]])
 }

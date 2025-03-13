@@ -13,10 +13,10 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_sexo_rais(ano = 2022,sexo = sexo))
   } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae == "") {
     # Caso 4: Apenas raca preenchida
-    return(cunsulta_raca_rais(ano = 2022,raca= raca))
+    return(consulta_raca_rais(ano = 2022,raca= raca))
   } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
     # Caso 5: Apenas grau_de_instrucao preenchido
-    return(consulta_grau_de_instrucao(ano=2022,gdi=grau_de_instrucao))
+    return(consulta_grau_de_instrucao_rais(ano=2022,gdi=grau_de_instrucao))
   } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
     # Caso 6: Apenas cnae preenchido
     return(consulta_cnae_rais(ano=2022,cnae=cnae))
@@ -46,7 +46,7 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_raca_gdi_rais(ano = 2022, raca=raca, gdi=grau_de_instrucao))
   } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
     # Caso 15: raca e cnae preenchidos
-    return(consulta_raca_cnae_rais(ano=2022,sexo,cnae=cnae))
+    return(consulta_raca_cnae_rais(ano=2022,raca=raca,cnae=cnae))
   } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
     # Caso 16: grau_de_instrucao e cnae preenchidos
     return(consulta_grau_de_instrucao_cnae_rais(ano=2022,gdi=grau_de_instrucao,cnae=cnae))
@@ -73,6 +73,7 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_sexo_raca_gdi_rais(ano=2022,sexo = sexo,raca=raca,gdi = grau_de_instrucao))
   } else if (local == "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
     # Caso 24: sexo, raca e cnae preenchidos
+    return(consulta_sexo_raca_cnae(ano=2022,sexo=sexo,raca=raca,cnae=cnae))
   } else if (local == "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
     # Caso 25: sexo, grau_de_instrucao e cnae preenchidos
     return(consulta_sexo_grau_de_instrucao_cnae_rais(ano=2022,sexo=sexo,gdi=grau_de_instrucao,cnae=cnae))
@@ -84,7 +85,7 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_estado_sexo_raca_gdi_rais(ano=2022,uf=local,sexo=sexo,raca=raca,gdi=grau_de_instrucao))
   } else if (local != "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
     # Caso 28: local, sexo, raca e cnae preenchidos
-    return(consulta_estado_raca_gdi_cnae_rais(ano = 2022,uf=local,sexo,raca=raca,cnae=cnae))
+    return(consulta_estado_raca_gdi_cnae_rais(ano = 2022,uf=local,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
   } else if (local != "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
     # Caso 29: local, sexo, grau_de_instrucao e cnae preenchidos
     return(consulta_estado_sexo_gdi_cnae_rais(ano=2022,uf=local,sexo=sexo,gdi=grau_de_instrucao,cnae=cnae))
@@ -96,6 +97,6 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_sexo_raca_gdi_cnae_rais(ano = 2022,sexo=sexo,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
   } else {
     # Caso 32: Todos preenchidos
-    return(consulta_todas_variaveis(ano =2022,uf=local,sexo=sexo,raca=raca,gdi=gdi,cnae=cnae = ))
+    return(consulta_todas_variaveis(ano =2022,uf=local,sexo=sexo,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
   }
 }
