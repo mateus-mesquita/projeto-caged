@@ -53,7 +53,7 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    AND silga_uf = '{uf}'
+    AND sigla_uf = '{uf}'
     AND dicionario_sexo.descricao_sexo = '{sexo}'
     AND diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
 ")

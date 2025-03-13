@@ -53,7 +53,7 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    And silga_uf = '{uf}';
+    And sigla_uf = '{uf}';
 ")
 
     resultado <- read_sql(query, set_billing_id=projeto_id)

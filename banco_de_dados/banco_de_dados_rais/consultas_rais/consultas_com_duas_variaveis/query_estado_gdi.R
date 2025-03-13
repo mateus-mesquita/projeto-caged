@@ -52,7 +52,7 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    And silga_uf = '{uf}'
+    And sigla_uf = '{uf}'
     AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}';
 ")
 

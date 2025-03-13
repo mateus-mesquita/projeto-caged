@@ -52,10 +52,12 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    And silga_uf = '{uf}'
+    And sigla_uf = '{uf}'
     AND dicionario_raca_cor.descricao_raca_cor = '{raca}';
 ")
 
-    resultado <- read_sql(query, set_billing_id=projeto_id)
+    resultado <- read_sql(query,projeto_id)
     return(resultado[[1]])
 }
+
+consulta_estado_raca_rais(2022,'CE','Preta')
