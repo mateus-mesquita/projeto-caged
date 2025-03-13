@@ -1,11 +1,12 @@
-import basedosdados as bd
 
-id_project= "plucky-pointer-433718-n5" # id do projeto
 
-def raca_(raca):
+query_grau_de_instrucao <- function(ano,gdi) {
+    # Defina o seu projeto no Google Cloud
+    projeyo_id <- "utility-emblem-409417"
 
-    tabela = f'''
-    WITH 
+    # Para carregar o dado direto no R
+    query <- glue("
+WITH
 dicionario_grau_instrucao_apos_2005 AS (
     SELECT
         chave AS chave_grau_instrucao_apos_2005,
@@ -37,18 +38,24 @@ dicionario_raca_cor AS (
         AND id_tabela = 'microdados_vinculos'
 )
 SELECT
-    count(*)
+  count(*)
 FROM `basedosdados.br_me_rais.microdados_vinculos` AS dados
 LEFT JOIN (SELECT DISTINCT sigla,nome  FROM `basedosdados.br_bd_diretorios_brasil.uf`) AS diretorio_sigla_uf
     ON dados.sigla_uf = diretorio_sigla_uf.sigla
+LEFT JOIN (SELECT DISTINCT cnae_1,descricao,descricao_grupo,descricao_divisao,descricao_secao  FROM `basedosdados.br_bd_diretorios_brasil.cnae_1`) AS diretorio_cnae_1
+    ON dados.cnae_1 = diretorio_cnae_1.cnae_1
+LEFT JOIN (SELECT DISTINCT subclasse,descricao_subclasse,descricao_classe,descricao_grupo,descricao_divisao,descricao_secao  FROM `basedosdados.br_bd_diretorios_brasil.cnae_2`) AS diretorio_cnae_2_subclasse
+    ON dados.cnae_2_subclasse = diretorio_cnae_2_subclasse.subclasse
 LEFT JOIN `dicionario_grau_instrucao_apos_2005`
     ON dados.grau_instrucao_apos_2005 = chave_grau_instrucao_apos_2005
 LEFT JOIN `dicionario_sexo`
     ON dados.sexo = chave_sexo
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
-     where ano = 2022
-    and dicionario_raca_cor.descricao_raca_cor = '{raca}';
-    '''
-    resultado = bd.read_sql(tabela,billing_project_id = id_project)
-    return resultado.iloc[0,0]
+    where ano = {ano}
+    AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}';
+")
+
+    resultado <- read_sql(query, set_billing_id)
+    return(resultado[[1]])
+}
