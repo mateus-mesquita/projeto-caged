@@ -1,6 +1,5 @@
-# Consulta para os estados
 
-consulta_estado_rais <- function(ano, uf) {
+query_estado_raca_gdi_rais <- function(ano,uf,raca,gdi) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 
@@ -53,9 +52,11 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    And silga_uf = '{uf}';
+    And silga_uf = '{uf}'
+    AND dicionario_raca_cor.descricao_raca_cor = '{raca}'
+    AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}';
 ")
 
-    resultado <- read_sql(query, set_billing_id)
+    resultado <- read_sql(query, set_billing_id=projeto_id)
     return(resultado[[1]])
 }

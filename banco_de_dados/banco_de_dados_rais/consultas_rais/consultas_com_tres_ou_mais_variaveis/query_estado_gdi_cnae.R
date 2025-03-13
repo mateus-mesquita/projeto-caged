@@ -1,7 +1,7 @@
 
-query_cnae_rais <- function(ano,cnae) {
+query_estado_grau_de_instrucao_cnae_rais <- function(ano,gdi,cnae) {
     # Defina o seu projeto no Google Cloud
-    projeyo_id <- "utility-emblem-409417"
+    projeto_id <- "utility-emblem-409417"
 
     # Para carregar o dado direto no R
     query <- glue("
@@ -52,9 +52,11 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
-    and diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
+    And silga_uf = '{uf}'
+    AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}'
+    AND diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
 ")
 
-    resultado <- read_sql(query, set_billing_id)
+    resultado <- read_sql(query, set_billing_id=projeto_id)
     return(resultado[[1]])
 }
