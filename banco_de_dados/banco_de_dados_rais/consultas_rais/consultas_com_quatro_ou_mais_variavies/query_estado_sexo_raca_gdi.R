@@ -58,6 +58,6 @@ LEFT JOIN `dicionario_raca_cor`
     AND dicionario_grau_instrucao_apos_2005.descricao_grau_instrucao_apos_2005 = '{gdi}';
 ")
 
-    resultado <- read_sql(query, set_billing_id=projeto_id)
+    resultado <- read_sql(query,projeto_id)
     return(resultado[[1]])
 }

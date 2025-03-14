@@ -56,6 +56,6 @@ LEFT JOIN `dicionario_raca_cor`
     And sigla_uf = '{uf}';
 ")
 
-    resultado <- read_sql(query, set_billing_id=projeto_id)
+    resultado <- read_sql(query,projeto_id)
     return(resultado[[1]])
 }

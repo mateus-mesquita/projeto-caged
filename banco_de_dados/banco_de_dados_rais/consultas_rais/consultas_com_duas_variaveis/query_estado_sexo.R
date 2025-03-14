@@ -56,6 +56,6 @@ LEFT JOIN `dicionario_raca_cor`
     AND dicionario_sexo.descricao_sexo = '{sexo}';
 ")
 
-    resultado <- read_sql(query, set_billing_id=projeto_id)
+    resultado <- read_sql(query,projeto_id)
     return(resultado[[1]])
 }

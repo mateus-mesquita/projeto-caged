@@ -58,6 +58,6 @@ LEFT JOIN `dicionario_raca_cor`
     and diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
 ")
 
-    resultado <- read_sql(query, set_billing_id=projeto_id)
+    resultado <- read_sql(query, projeto_id)
     return(resultado[[1]])
 }
