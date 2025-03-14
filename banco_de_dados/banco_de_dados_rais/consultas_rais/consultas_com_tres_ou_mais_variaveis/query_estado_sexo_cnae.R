@@ -55,7 +55,7 @@ LEFT JOIN `dicionario_raca_cor`
     where ano = {ano}
     AND sigla_uf = '{uf}'
     AND dicionario_sexo.descricao_sexo = '{sexo}'
-    AND diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
+    AND diretorio_cnae_2_subclasse.descricao_secao = '{cnae}';
 ")
 
     resultado <- read_sql(query,projeto_id)

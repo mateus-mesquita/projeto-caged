@@ -53,7 +53,7 @@ LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     where ano = {ano}
     AND dicionario_raca_cor.descricao_raca_cor = '{raca}'
-    AND diretorio_cnae_2_subclasse.descricao_divisao = '{cnae}';
+    AND diretorio_cnae_2_subclasse.descricao_secao = '{cnae}';
 ")
     resultado <- read_sql(query,projeto_id)
     return(resultado[[1]])
