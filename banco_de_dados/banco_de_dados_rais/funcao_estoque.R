@@ -16,7 +16,7 @@ funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
     return(consulta_raca_rais(ano = 2022,raca= raca))
   } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
     # Caso 5: Apenas grau_de_instrucao preenchido
-    return(consulta_grau_de_instrucao_rais(ano=2022,gdi=grau_de_instrucao))
+    return(consulta_grau_de_instrucao(ano=2022,gdi=grau_de_instrucao))
   } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
     # Caso 6: Apenas cnae preenchido
     return(consulta_cnae_rais(ano=2022,cnae=cnae))
