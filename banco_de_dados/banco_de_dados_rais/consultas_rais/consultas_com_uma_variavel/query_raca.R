@@ -1,5 +1,4 @@
-
-query_raca_rais <- function(ano,raca) {
+consulta_raca_rais <- function(ano,raca) {
     # Defina o seu projeto no Google Cloud
     projeto_id <- "utility-emblem-409417"
 
