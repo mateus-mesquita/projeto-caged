@@ -1,30 +1,32 @@
-# Projeto RAIS(Relação Anual de Informações Sociais)
+# Projeto de Extração e Atualização de Dados do CAGED
 
-inserir uma breve descrição.
+## Descrição
+Este projeto tem como objetivo extrair, processar e atualizar o conjunto de dados do estoque de empregos do CAGED (Cadastro Geral de Empregados e Desempregados). Utiliza-se SQL para manipulação dos dados, C++ para otimização de processamento e R para análise e organização dos dados gerados.
 
-## Colata dos dados:
+## Tecnologias Utilizadas
+- **SQL**: Extração e manipulação dos dados do banco.
+- **C++**: Implementação de algoritmos eficientes para processamento de grandes volumes de dados.
+- **R**: Análise estatística e formatação final dos dados.
 
-Por causa da grande quantidade de dados, baixar os dados da RAIS diretamente para o computador não
-foi uma opção. Entretando, atráves do banco de dados, da empresa base dos dados, foi possível realizar
-consultas e guardar nossas variáveis em um banco de dados próprio.
+## Estrutura do Projeto
+- **scripts/**: Códigos SQL, C++ e R.
+- **dados/**: Arquivos de entrada e saída.
+- **documentação/**: Explicação detalhada sobre os procedimentos.
+- **relatórios/**: Resultados das análises.
 
-Embora a ferramenta principal desse projeto seja o R, para essa foi utilizado o python.
-caso use os códigos para gerar outro banco de dados, ou algo parecido. Deve-se realizar as seguintes
-instalações no jupyter ou colab:
-```
-!pip install basedosdados
+## Como Executar
+1. **Preparar o Ambiente**
+   - Instalar um banco de dados compatível com SQL.
+   - Compilar os códigos C++.
+   - Configurar o ambiente R.
+2. **Executar os scripts**
+   - Rodar as consultas SQL para extração dos dados.
+   - Processar os arquivos com os programas em C++.
+   - Utilizar os scripts R para análise e geração do estoque atualizado.
 
-!pip uninstall -y shapely pygeos geopandas
-# Install specific versions of shapely, pygeos, and geopandas known to be compatible
-!pip install shapely==1.8.5.post1 pygeos==0.12.0 geopandas==0.10.2
-# Upgrade google-cloud-aiplatform
-!pip install -U google-cloud-aiplatform
+## Contribuição
+Sinta-se à vontade para sugerir melhorias ou relatar problemas.
 
-```
-e depois essas importações:
-```
-import sqlite3
-import basedosdados as bd
-import pandas as pd
-import numpy as np
-```
+## Licença
+Este projeto é distribuído sob a licença MIT.
+
