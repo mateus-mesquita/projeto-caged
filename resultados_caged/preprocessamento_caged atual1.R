@@ -134,7 +134,6 @@ preprocessamento <- function(arquivo_caged)
   
   # excluindo variáveis:
   caged$município <- NULL
-  caged$seção <- NULL
   caged$região <- NULL
   caged$subclasse <- NULL
   caged$saldomovimentação <- NULL
@@ -159,4 +158,5 @@ preprocessamento <- function(arquivo_caged)
   
   return(caged)
 }
+
 
