@@ -132,14 +132,25 @@ preprocessamento <- function(arquivo_caged)
   caged$tipomovimentação[caged$tipomovimentação==98] <- 'Desligamento de Tipo Ignorado'
   caged$tipomovimentação[caged$tipomovimentação==99] <- 'Não Identificado'
   
+  caged <- caged %>%
+    mutate(faixa_idade = case_when(
+      idade >= 14 & idade <= 17 ~ "14 a 17",
+      idade >= 18 & idade <= 24 ~ "18 a 24",
+      idade >= 25 & idade <= 39 ~ "25 a 39",
+      idade >= 40 & idade <= 59 ~ "40 a 59",
+      idade >= 60 ~ "60 ou mais",
+      TRUE ~ NA_character_
+    ))
+  
+  
   # excluindo variáveis:
   caged$município <- NULL
   caged$região <- NULL
+  caged$idade <- NULL
   caged$subclasse <- NULL
   caged$saldomovimentação <- NULL
   caged$cbo2002ocupação <- NULL
   caged$categoria <- NULL
-  caged$idade <- NULL
   caged$horascontratuais <- NULL
   caged$tipoempregador <- NULL
   caged$tipoestabelecimento <- NULL
@@ -159,4 +170,5 @@ preprocessamento <- function(arquivo_caged)
   return(caged)
 }
 
+dados = preprocessamento("CAGEDFOR202201.txt")
 
