@@ -43,3 +43,8 @@ setores <- c("",
 
 # idades
 idades <- c("","14 a 17","18 a 24","25 a 39","40 a 59","60 ou mais")
+
+mes <- c("janeiro","fevereiro","março","abril","maio","junho","julho","agosto","outubro","setembro","novembro","dezembro")
+
+
+
