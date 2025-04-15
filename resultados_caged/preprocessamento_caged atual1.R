@@ -165,6 +165,7 @@ preprocessamento <- function(arquivo_caged)
   caged$indicadordeforadoprazo <- NULL
   caged$unidadesaláriocódigo <- NULL
   caged$valorsaláriofixo <- NULL
+  caged$competênciamov <- NULL
   
   
   return(caged)
