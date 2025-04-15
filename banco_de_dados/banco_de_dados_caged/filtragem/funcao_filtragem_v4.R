@@ -28,7 +28,7 @@ filtragem_4V = function(tabela, conexao, local_, sexo_, raca_, idade_, gdi_, set
         END AS validacao
       FROM {tabela}
 )
-SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, seção
+SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, seção, tipomovimentação
 FROM filtragem
 WHERE validacao = TRUE;
     "
