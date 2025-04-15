@@ -1,6 +1,6 @@
 # Funções de filtragem
 
-filtragem_2V <- function(tabela, local_, sexo_, raca_, idade_, gdi_, setor_) {
+filtragem_2V <- function(conexao,tabela, local_, sexo_, raca_, idade_, gdi_, setor_) {
   query <- glue::glue(
     "
 WITH filtragem AS (
@@ -36,7 +36,9 @@ WHERE validacao = TRUE;
 "
   )
   
-  return(dbGetQuery(con, query))
+  return(dbGetQuery(conexao, query))
 }
+
+
 
 
