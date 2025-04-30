@@ -1,0 +1,23 @@
+-- Tabela de combinações:
+CREATE TABLE combinacoes_estado (
+	id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	uf TEXT NOT NULL,
+	sexo TEXT NOT NULL,
+	raca TEXT NOT NULL,
+	idade TEXT NOT NULL,
+	gdi TEXT NOT NULL,
+	cnae TEXT NOT NULL
+	
+);
+
+
+CREATE TABLE combinacoes_municipio (
+	id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	municipio TEXT NOT NULL,
+	sexo TEXT NOT NULL,
+	raca TEXT NOT NULL,
+	idade TEXT NOT NULL,
+	gdi TEXT NOT NULL,
+	cnae TEXT NOT NULL
+	
+);
