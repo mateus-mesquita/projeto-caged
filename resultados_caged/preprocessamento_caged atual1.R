@@ -144,7 +144,6 @@ preprocessamento <- function(arquivo_caged)
   
   
   # excluindo variáveis:
-  caged$município <- NULL
   caged$região <- NULL
   caged$idade <- NULL
   caged$subclasse <- NULL
@@ -172,4 +171,7 @@ preprocessamento <- function(arquivo_caged)
 }
 
 dados = preprocessamento("CAGEDFOR202201.txt")
+ 
+  round(qnorm(1-(1-0.02/2)),3)
 
+        
