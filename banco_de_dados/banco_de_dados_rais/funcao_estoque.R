@@ -1,102 +1,176 @@
-# Criando função de consultar estoque Rais:
+# testando consultas na base dos dados da Rais
+library(basedosdados)
+library(bigrquery)
 
-funcao_estoque_rais = function(local, sexo, raca, grau_de_instrucao, cnae) {
+
+
+teste <- function(ano,local_,sexo_,raca_,idade_,instrucao_,setor_){
   
-  if (local == "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 1: Todos vazios
-    return(consulta_geral_rais(ano = 2022))
-  } else if (local != "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 2: Apenas local preenchido
-    return(consulta_estado_rais(ano = 2022,uf = local))
-  } else if (local == "" & sexo != "" & raca == "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 3: Apenas sexo preenchido
-    return(consulta_sexo_rais(ano = 2022,sexo = sexo))
-  } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 4: Apenas raca preenchida
-    return(consulta_raca_rais(ano = 2022,raca= raca))
-  } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 5: Apenas grau_de_instrucao preenchido
-    return(consulta_grau_de_instrucao(ano=2022,gdi=grau_de_instrucao))
-  } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 6: Apenas cnae preenchido
-    return(consulta_cnae_rais(ano=2022,cnae=cnae))
-  } else if (local != "" & sexo != "" & raca == "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 7: local e sexo preenchidos
-    return(consulta_estado_sexo_rais(ano=2022,uf=local,sexo=sexo))
-  } else if (local != "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 8: local e raca preenchidos
-    return(consulta_estado_raca_rais(ano=2022,uf=local,raca=raca))
-  } else if (local != "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 9: local e grau_de_instrucao preenchidos
-    return(consulta_estado_gdi_rais(ano = 2022, uf = local, gdi=grau_de_instrucao))
-  } else if (local != "" & sexo == "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 10: local e cnae preenchidos
-    return(consulta_estado_cnae_rais(ano=2022,uf=local,cnae=cnae))
-  } else if (local == "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 11: sexo e raca preenchidos
-    return(consulta_sexo_raca_rais(ano=2022,sexo=sexo,raca=raca))
-  } else if (local == "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 12: sexo e grau_de_instrucao preenchidos
-    return(consulta_sexo_gdi_rais(ano = 2022,sexo=sexo,gdi=grau_de_instrucao))
-  } else if (local == "" & sexo != "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 13: sexo e cnae preenchidos
-    return(consulta_sexo_cnae_rais(ano = 2022, sexo = sexo,cnae=cnae))
-  } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 14: raca e grau_de_instrucao preenchidos
-    return(consulta_raca_gdi_rais(ano = 2022, raca=raca, gdi=grau_de_instrucao))
-  } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 15: raca e cnae preenchidos
-    return(consulta_raca_cnae_rais(ano=2022,raca=raca,cnae=cnae))
-  } else if (local == "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 16: grau_de_instrucao e cnae preenchidos
-    return(consulta_grau_de_instrucao_cnae_rais(ano=2022,gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local != "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae == "") {
-    # Caso 17: local, sexo e raca preenchidos
-    return(consulta_estado_sexo_raca_rais(ano=2022,uf=local,sexo=sexo,raca=raca))
-  } else if (local != "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 18: local, sexo e grau_de_instrucao preenchidos
-    return(consulta_estado_sexo_gdi_rais(ano=2022,uf = local,sexo=sexo,gdi=grau_de_instrucao))
-  } else if (local != "" & sexo != "" & raca == "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 19: local, sexo e cnae preenchidos
-    return(consulta_estado_sexo_cnae_rais(ano = 2022,uf=local,sexo=sexo,cnae=cnae))
-  } else if (local != "" & sexo == "" & raca != "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 20: local, raca e grau_de_instrucao preenchidos
-    return(consulta_estado_raca_gdi_rais(ano = 2022,uf=local,raca=raca,gdi = grau_de_instrucao))
-  } else if (local != "" & sexo == "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 21: local, raca e cnae preenchidos
-    return(consulta_estado_raca_cnae_rais(ano = 2022,uf=local,raca=raca,cnae=cnae))
-  } else if (local != "" & sexo == "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 22: local, grau_de_instrucao e cnae preenchidos
-    return(consulta_estado_grau_de_instrucao_cnae_rais(ano = 2022, uf = local, gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local == "" & sexo != "" & raca != "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 23: sexo, raca e grau_de_instrucao preenchidos
-    return(consulta_sexo_raca_gdi_rais(ano=2022,sexo = sexo,raca=raca,gdi = grau_de_instrucao))
-  } else if (local == "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 24: sexo, raca e cnae preenchidos
-    return(consulta_sexo_raca_cnae(ano=2022,sexo=sexo,raca=raca,cnae=cnae))
-  } else if (local == "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 25: sexo, grau_de_instrucao e cnae preenchidos
-    return(consulta_sexo_grau_de_instrucao_cnae_rais(ano=2022,sexo=sexo,gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local == "" & sexo == "" & raca != "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 26: raca, grau_de_instrucao e cnae preenchidos
-    return(consulta_raca_gdi_cnae_rais(ano=2022,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local != "" & sexo != "" & raca != "" & grau_de_instrucao != "" & cnae == "") {
-    # Caso 27: local, sexo, raca e grau_de_instrucao preenchidos
-    return(consulta_estado_sexo_raca_gdi_rais(ano=2022,uf=local,sexo=sexo,raca=raca,gdi=grau_de_instrucao))
-  } else if (local != "" & sexo != "" & raca != "" & grau_de_instrucao == "" & cnae != "") {
-    # Caso 28: local, sexo, raca e cnae preenchidos
-    return(consulta_estado_raca_gdi_cnae_rais(ano = 2022,uf=local,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local != "" & sexo != "" & raca == "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 29: local, sexo, grau_de_instrucao e cnae preenchidos
-    return(consulta_estado_sexo_gdi_cnae_rais(ano=2022,uf=local,sexo=sexo,gdi=grau_de_instrucao,cnae=cnae))
-  } else if (local != "" & sexo == "" & raca != "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 30: local, raca, grau_de_instrucao e cnae 
-    return(consulta_estado_raca_gdi_cnae_rais(ano=2022,uf=local,raca=raca,gdi=grau_de_instrucao,cnae =cnae))
-  } else if (local == "" & sexo != "" & raca != "" & grau_de_instrucao != "" & cnae != "") {
-    # Caso 31: sexo, raca, grau_de_instrucao e cnae preenchidos
-    return(consulta_sexo_raca_gdi_cnae_rais(ano = 2022,sexo=sexo,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
-  } else {
-    # Caso 32: Todos preenchidos
-    return(consulta_todas_variaveis(ano =2022,uf=local,sexo=sexo,raca=raca,gdi=grau_de_instrucao,cnae=cnae))
-  }
+  # Defina o seu projeto no Google Cloud
+  set_billing_id("utility-emblem-409417")
+  
+  query <- glue('
+WITH 
+dicionario_faixa_etaria AS (
+    SELECT
+        chave AS chave_faixa_etaria,
+        valor AS descricao_faixa_etaria
+    FROM `basedosdados.br_me_rais.dicionario`
+    WHERE
+        TRUE
+        AND nome_coluna = "faixa_etaria"
+        AND id_tabela = "microdados_vinculos"
+),
+dicionario_grau_instrucao_apos_2005 AS (
+    SELECT
+        chave AS chave_grau_instrucao_apos_2005,
+        valor AS descricao_grau_instrucao_apos_2005
+    FROM `basedosdados.br_me_rais.dicionario`
+    WHERE
+        TRUE
+        AND nome_coluna = "grau_instrucao_apos_2005"
+        AND id_tabela = "microdados_vinculos"
+),
+dicionario_sexo AS (
+    SELECT
+        chave AS chave_sexo,
+        valor AS descricao_sexo
+    FROM `basedosdados.br_me_rais.dicionario`
+    WHERE
+        TRUE
+        AND nome_coluna = "sexo"
+        AND id_tabela = "microdados_vinculos"
+),
+dicionario_raca_cor AS (
+    SELECT
+        chave AS chave_raca_cor,
+        valor AS descricao_raca_cor
+    FROM `basedosdados.br_me_rais.dicionario`
+    WHERE
+        TRUE
+        AND nome_coluna = "raca_cor"
+        AND id_tabela = "microdados_vinculos"
+),
+
+filtragem AS (
+SELECT
+    dados.ano as ano,
+    dados.sigla_uf AS sigla_uf,
+    diretorio_cnae_2_subclasse.descricao_secao AS cnae_2_subclasse_descricao_secao,
+    descricao_faixa_etaria AS faixa_etaria,
+    descricao_grau_instrucao_apos_2005 AS grau_instrucao_apos_2005,
+    descricao_sexo AS sexo,
+    descricao_raca_cor AS raca_cor
+FROM `basedosdados.br_me_rais.microdados_vinculos` AS dados
+LEFT JOIN (SELECT DISTINCT sigla,nome  FROM `basedosdados.br_bd_diretorios_brasil.uf`) AS diretorio_sigla_uf
+    ON dados.sigla_uf = diretorio_sigla_uf.sigla
+LEFT JOIN (SELECT DISTINCT id_municipio,nome  FROM `basedosdados.br_bd_diretorios_brasil.municipio`) AS diretorio_id_municipio
+    ON dados.id_municipio = diretorio_id_municipio.id_municipio
+LEFT JOIN (SELECT DISTINCT subclasse,descricao_subclasse,descricao_classe,descricao_grupo,descricao_divisao,descricao_secao  FROM `basedosdados.br_bd_diretorios_brasil.cnae_2`) AS diretorio_cnae_2_subclasse
+    ON dados.cnae_2_subclasse = diretorio_cnae_2_subclasse.subclasse
+LEFT JOIN `dicionario_faixa_etaria`
+    ON dados.faixa_etaria = chave_faixa_etaria
+LEFT JOIN `dicionario_grau_instrucao_apos_2005`
+    ON dados.grau_instrucao_apos_2005 = chave_grau_instrucao_apos_2005
+LEFT JOIN `dicionario_sexo`
+    ON dados.sexo = chave_sexo
+LEFT JOIN `dicionario_raca_cor`
+    ON dados.raca_cor = chave_raca_cor
+    WHERE ano = {ano}
+),
+rais AS (
+  SELECT *, CASE 
+    -- 1 a 1
+    WHEN sexo = "{sexo_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" THEN TRUE
+    WHEN grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN sigla_uf = "{local_}" THEN TRUE
+    WHEN cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE  
+
+    -- 2 a 2
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    WHEN sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    -- 3 a 3
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    -- 4 a 4
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    -- 5 a 5
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+    -- 6 a 6
+    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
+
+  END AS validacao
+  FROM filtragem
+)
+
+SELECT count(*) FROM rais WHERE validacao = TRUE;
+
+
+')
+  
+  s = read_sql(query, billing_project_id = get_billing_id())
+  return(s)
 }
+
+teste(2022,"CE","","","","","Construção")
