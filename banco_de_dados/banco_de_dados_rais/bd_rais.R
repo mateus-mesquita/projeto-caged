@@ -10,75 +10,114 @@ library(RSQLite)       # Conexão com SQLite
 library(sqldf)        # Manipulação de dados SQL dentro do R
 
 # Criar ou conectar ao banco de dados SQLite (se não existir, será criado)
-con <- dbConnect(RSQLite::SQLite(), "Rais_dados.db")
+con <- dbConnect(RSQLite::SQLite(), "dados_rais.db")
 
 # Criando a tabela "rais" com os campos especificados
-dbExecute(con, "CREATE TABLE rais(
+dbExecute(con, "CREATE TABLE rais_estado(
                   ano INTEGER,
-                  local TEXT,
+                  uf TEXT,
                   sexo  TEXT,
                   raca  TEXT,
+                  idade TEXT,
                   grau_de_instrucao TEXT,
                   cnae TEXT,
                   estoque INTEGER
                 );")
 
-# Definição das categorias para preenchimento da tabela
-local = c("")
-sexo = c ("", "Feminino", "Masculino", "Não informado")
-raca_cor = c("", "Branca", "Preta", "Parda", "Amarela", "Indígena", 
-             "Não informada", "Não identificada" )
-grau_de_instrucao = c("", "ANALFABETO", "ATE 5.A INC", "5.A CO FUND", "6.A.9.FUND",
-                      "FUND COMPL", "MEDIO INCOMP", "MEDIO COMPL",
-                      "SUP.INCOMP", "SUP.COMP", "MESTRADO",
-                      "DOUTORADO")
-setores <- c("",
-  "Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura",
-  "Indústrias Extrativas",
-  "Indústrias de Transformação",
-  "Eletricidade e Gás",
-  "Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação",
-  "Construção",
-  "Comércio; Reparação de Veículos Automotores e Motocicletas",
-  "Transporte, Armazenagem e Correio",
-  "Alojamento e Alimentação",
-  "Informação e Comunicação",
-  "Atividades Financeiras, de Seguros e Serviços Relacionados",
-  "Atividades Imobiliárias",
-  "Atividades Profissionais, Científicas e Técnicas",
-  "Atividades Administrativas e Serviços Complementares",
-  "Administração Pública, Defesa e Seguridade Social",
-  "Educação",
-  "Saúde Humana e Serviços Sociais",
-  "Artes, Cultura, Esporte e Recreação",
-  "Outras Atividades de Serviços",
-  "Serviços Domésticos",
-  "Organismos Internacionais e Outras Instituições Extraterritoriais",
-  "Não identificado"
-)
+# Criando função checkpoint e processamento em eslotes
 
-# Inserindo dados na tabela iterativamente
-for(local_ in local){
-  for(sexo_ in sexo){
-    for(cor_ in raca_cor){
-      for(gdi_ in grau_de_instrucao){
-        for(setor_ in setores){
-          
-
-          
-          # Inserção dos dados na tabela "rais"
-          dbExecute(con, glue("INSERT INTO rais (ano, local, sexo, raca, grau_de_instrucao, cnae, estoque) 
-                    VALUES (2022, '{local_}', '{sexo_}',
-                          '{cor_}','{gdi_}',' {setor_}',{funcao_estoque_rais(local_,sexo_,cor_,gdi_,setor_)});
-          "))
+Iterador <- function(local_vetor, sexo_vetor, raca_vetor, idade_vetor, gdi_vetor,setor_vetor){
+  lista = list()
+  
+  i = 1
+  for(local_ in local_vetor){
+    for(sexo_ in sexo_vetor){
+      for(raca_ in raca_cor){
+        for(idade_ in idade_vetor){
+          for(gdi_ in gdi_vetor){
+            for(setor_ in setor_vetor){
+              
+              lista[[i]] <- c(local_,sexo_,raca_,idade_,gdi_,setor_)
+              i = i+1
+            }
+          }
         }
       }
     }
   }
+  return(lista)
 }
 
+# lista de iterações
+lista_iteracoes = Iterador(local,sexo,raca,idades,grau_de_instrucao,setores)
 
-
-
- 
+input.rais <- function(tabela,lista,checkpoint = FALSE,tempo = 2,ano){
+  if(checkpoint == FALSE){
+    i = 1
+    while(i <= length(lista)){
+      
+      if(i %% 10 == 0){
+        Sys.sleep(tempo)
+      }
+      
+      if(lista[[i]][1]=="" & lista[[i]][2] == "" & lista[[i]][3] == "" & lista[[i]][4] == "" & lista[[i]][5] == "" & lista[[i]][6] == ""){
+        dbExecute(con,
+                  glue('INSERT INTO "{tabela}"(ano,uf,sexo,raca,idade,grau_de_instrucao,cnae,estoque)
+                       VALUES 
+                       ({ano},"{lista[[i]][1]}","{lista[[i]][2]}","{lista[[i]][3]}","{lista[[i]][4]}","{lista[[i]][5]}","{lista[[i]][6]}",
+                     {contagem_arquivo({ano})});'))
+        
+        cat(i,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6],
+            funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6]),"\n")
+        i = i + 1
+      }
+      
+      else{
+      dbExecute(con,
+                glue('INSERT INTO "{tabela}"(ano,uf,sexo,raca,idade,grau_de_instrucao,cnae,estoque)
+                       VALUES 
+                       ({ano},"{lista[[i]][1]}","{lista[[i]][2]}","{lista[[i]][3]}","{lista[[i]][4]}","{lista[[i]][5]}","{lista[[i]][6]}",
+                     {funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6])});'))
+      
+      cat(i,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6],
+          funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6]),"\n")
+      i = i + 1
+      }
+    }
+  }
+    else{
+      i = checkpoint
+      while(i <= length(lista)){
+      if(i %% 10 == 0){
+        Sys.sleep(tempo)
+      }
+      
+      if(lista[[i]][1]=="" & lista[[i]][2] == "" & lista[[i]][3] == "" & lista[[i]][4] == "" & lista[[i]][5] == "" & lista[[i]][6] == ""){
+        dbExecute(con,
+                  glue('INSERT INTO "{tabela}"(ano,uf,sexo,raca,idade,grau_de_instrucao,cnae,estoque)
+                       VALUES 
+                       ({ano},"{lista[[i]][1]}","{lista[[i]][2]}","{lista[[i]][3]}","{lista[[i]][4]}","{lista[[i]][5]}","{lista[[i]][6]}",
+                     {contagem_arquivo({ano})});'))
+        
+        cat(i,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6],
+            funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6]),"\n")
+        i = i + 1
+      }
+      
+      else{
+        dbExecute(con,
+                  glue('INSERT INTO "{tabela}"(ano,uf,sexo,raca,idade,grau_de_instrucao,cnae,estoque)
+                       VALUES 
+                       ({ano},"{lista[[i]][1]}","{lista[[i]][2]}","{lista[[i]][3]}","{lista[[i]][4]}","{lista[[i]][5]}","{lista[[i]][6]}",
+                     {funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6])});'))
+        
+        cat(i,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6],
+            funcao_estoque(ano,lista[[i]][1],lista[[i]][2],lista[[i]][3],lista[[i]][4],lista[[i]][5],lista[[i]][6]),"\n")
+        i = i + 1
+      }
+    }
+  }
+}
+input.rais("rais_estado",lista_iteracoes,13,4,ano = 2022)
+  
 
