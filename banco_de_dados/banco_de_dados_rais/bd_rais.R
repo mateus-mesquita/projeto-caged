@@ -118,6 +118,6 @@ input.rais <- function(tabela,lista,checkpoint = FALSE,tempo = 2,ano){
     }
   }
 }
-input.rais("rais_estado",lista_iteracoes,13,4,ano = 2022)
+input.rais("rais_estado",lista_iteracoes,FALSE,10,ano = 2022)
   
 
