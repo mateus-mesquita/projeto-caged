@@ -144,8 +144,16 @@ contagem.mov <- function(tabela,conexao,local,sexo,raca,idade,gdi,setor){
       i = i + 1
     }
   }
-  
-  if(i == 5){
+  if(local == "" & sexo == "" & raca == "" & idade == "" & gdi == "" & setor == ""){
+    query <- glue::glue(
+      "
+    SELECT count(*) FROM {tabela} WHERE tipomovimentação LIKE '%Admissao%';
+    "
+    )
+    df = dbGetQuery(conexao, query)
+    return(as.numeric(df$count[[1]]))
+  }
+  else if(i == 5){
     resultado = filtragem_1V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
     return(as.numeric(resultado)) 
   }
