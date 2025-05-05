@@ -79,25 +79,15 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-    -- 1 a 1
-    WHEN sexo = "{sexo_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" THEN TRUE
-    WHEN grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN sigla_uf = "{local_}" THEN TRUE
-    WHEN cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE  
-    ELSE FALSE
-
-  END AS validacao
-  FROM filtragem
 )
 
-SELECT count(*) FROM rais WHERE validacao = TRUE;
-
-
+SELECT count(*) FROM filtragem
+ WHERE sigla_uf = "{local_}" OR
+  sexo = "{sexo_}" OR
+  raca_cor = "{raca_}" OR
+  faixa_etaria = "{idade_}" OR
+  grau_instrucao_apos_2005 = "{instrucao_}" OR
+  cnae_2_subclasse_descricao_secao = "{setor_}";
 ')
   
   s = read_sql(query, billing_project_id = get_billing_id())
@@ -177,36 +167,23 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-    -- 2 a 2
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-    WHEN sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    ELSE FALSE
-
-  END AS validacao
-  FROM filtragem
 )
-
-SELECT count(*) FROM rais WHERE validacao = TRUE;
+  SELECT count(*) FROM filtragem
+ WHERE (sigla_uf = "{local_}" AND sexo = "{sexo_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}")
+    OR (sigla_uf = "{local_}" AND faixa_etaria = "{idade_}")
+    OR (sigla_uf = "{local_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}")
+    OR (sexo = "{sexo_}" AND faixa_etaria = "{idade_}")
+    OR (sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sexo = "{sexo_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (raca_cor = "{raca_}" AND faixa_etaria = "{idade_}")
+    OR (raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}");
 
 ')
 
@@ -287,39 +264,28 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-    -- 3 a 3
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    ELSE FALSE
-
-  END AS validacao
-  FROM filtragem
 )
-
-SELECT count(*) FROM rais WHERE validacao = TRUE;
-
-
+SELECT count(*) FROM filtragem
+ WHERE (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND faixa_etaria = "{idade_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}");
 ')
 
 s = read_sql(query, billing_project_id = get_billing_id())
@@ -465,35 +431,23 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-     -- 4 a 4
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    ELSE FALSE
-
-  END AS validacao
-  FROM filtragem
 )
-
-SELECT count(*) FROM rais WHERE validacao = TRUE;
-
-
+SELECT count(*) FROM filtragem
+ WHERE (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}");
 ')
 s = read_sql(query, billing_project_id = get_billing_id())
 return(s$f0_[1])
@@ -573,24 +527,14 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-    -- 5 a 5
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    WHEN raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-    ELSE FALSE
-
-  END AS validacao
-  FROM filtragem
 )
-
-SELECT count(*) FROM rais WHERE validacao = TRUE;
-
+SELECT count(*) FROM filtragem
+ WHERE (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND sexo = "{sexo_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sigla_uf = "{local_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}")
+    OR (sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND cnae_2_subclasse_descricao_secao = "{setor_}");
 
 ')
   s = read_sql(query, billing_project_id = get_billing_id())
@@ -670,18 +614,13 @@ LEFT JOIN `dicionario_sexo`
 LEFT JOIN `dicionario_raca_cor`
     ON dados.raca_cor = chave_raca_cor
     WHERE ano = {ano}
-),
-rais AS (
-  SELECT *, CASE 
-  
-    -- 6 a 6
-    WHEN sexo = "{sexo_}" AND raca_cor = "{raca_}" AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}" AND sigla_uf = "{local_}" AND cnae_2_subclasse_descricao_secao = "{setor_}" THEN TRUE
-
-  END AS validacao
-  FROM filtragem
 )
 
-SELECT count(*) FROM rais WHERE validacao = TRUE;
+SELECT count(*) FROM filtragem
+ WHERE sigla_uf = "{local_}" AND sexo = "{sexo_}" AND raca_cor = "{raca_}"
+   AND faixa_etaria = "{idade_}" AND grau_instrucao_apos_2005 = "{instrucao_}"
+   AND cnae_2_subclasse_descricao_secao = "{setor_}";
+
 ')
 s = read_sql(query, billing_project_id = get_billing_id())
 return(s$f0_[1])
@@ -716,7 +655,7 @@ funcao_estoque <- function(ano,local,sexo,raca,idade,gdi,setor){
     return(funcao_estoque.1(ano,local,sexo,raca,idade,gdi,setor))
   }
 }
-funcao_estoque(2022,"","","","","MEDIO COMPL","Transporte, Armazenagem e Correio")
+funcao_estoque(2022,"CE","","","","MEDIO COMPL","Construção")
 
 
 
