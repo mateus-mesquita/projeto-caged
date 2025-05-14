@@ -135,7 +135,9 @@ filtragem_6V <- function(tabela, conexao, local_, sexo_, raca_, idade_, gdi_, se
 
 
 
-contagem.mov <- function(tabela,conexao,local,sexo,raca,idade,gdi,setor){
+contagem.mov.for <- function(tabela,local,sexo,raca,idade,gdi,setor){
+  
+  conexao = RSQLite::dbConnect(SQLite(),"cagedfor.db")
     
   v = c(local,sexo,raca,idade,gdi,setor)
   i = 0
@@ -178,4 +180,116 @@ contagem.mov <- function(tabela,conexao,local,sexo,raca,idade,gdi,setor){
     return(as.numeric(resultado)) 
   }
 }
+
+contagem.mov.exc <- function(tabela,local,sexo,raca,idade,gdi,setor){
+  
+  conexao = RSQLite::dbConnect(SQLite(),"cagedexc.db")
+  
+  v = c(local,sexo,raca,idade,gdi,setor)
+  i = 0
+  for(v_ in v){
+    if(v_ == ''){
+      i = i + 1
+    }
+  }
+  if(local == "" & sexo == "" & raca == "" & idade == "" & gdi == "" & setor == ""){
+    query <- glue::glue(
+      "
+    SELECT count(*) FROM {tabela} WHERE tipomovimentação LIKE '%Admissao%';
+    "
+    )
+    df = dbGetQuery(conexao, query)
+    return(as.numeric(df$count[[1]]))
+  }
+  else if(i == 5){
+    resultado = filtragem_1V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 4){
+    resultado = filtragem_2V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 3){
+    resultado = filtragem_3V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 2){
+    resultado = filtragem_4V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 1){
+    resultado = filtragem_5V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else{
+    resultado = filtragem_6V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+}
+
+contagem.mov.mov <- function(tabela,local,sexo,raca,idade,gdi,setor){
+  
+  conexao = RSQLite::dbConnect(SQLite(),"cagedmov.db")
+  
+  v = c(local,sexo,raca,idade,gdi,setor)
+  i = 0
+  for(v_ in v){
+    if(v_ == ''){
+      i = i + 1
+    }
+  }
+  if(local == "" & sexo == "" & raca == "" & idade == "" & gdi == "" & setor == ""){
+    query <- glue::glue(
+      "
+    SELECT count(*) FROM {tabela} WHERE tipomovimentação LIKE '%Admissao%';
+    "
+    )
+    df = dbGetQuery(conexao, query)
+    return(as.numeric(df$count[[1]]))
+  }
+  else if(i == 5){
+    resultado = filtragem_1V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 4){
+    resultado = filtragem_2V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 3){
+    resultado = filtragem_3V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 2){
+    resultado = filtragem_4V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else if(i == 1){
+    resultado = filtragem_5V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+  else{
+    resultado = filtragem_6V(tabela,conexao,local,sexo,raca,idade,gdi,setor)
+    return(as.numeric(resultado)) 
+  }
+}
+
+
+
+
+for(local_ in local){
+  for(sexo_ in sexo){
+    for(raca_ in raca_cor){
+      for(idade_ in idades){
+        for(gdi_ in grau_de_instrucao){
+          for(setor_ in setores){
+            cat(local_,sexo_,raca_,idade_,gdi_,setor_,
+                contagem.mov.for('CAGEDFOR202201',local_,sexo_,raca_,idade_,gdi_,setor_),
+                contagem.mov_demissoes.for('CAGEDFOR202201',local_,sexo_,raca_,idade_,gdi_,setor_),"\n")
+          }
+        }
+      }
+    }
+  }
+}
+
 
