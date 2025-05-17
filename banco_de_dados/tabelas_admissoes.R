@@ -494,9 +494,9 @@ admissoes_6 <- function(tabela, conexao,ano) {
   dbExecute(conexao, query)
 }
 
-admissoes_6("CAGEDFOR202202",con_for,"for202202")
+admissoes_1("CAGEDFOR202202",con_for,"for202202")
 
-lista <- list(
+  lista <- list(
   "1" = c("CAGEDFOR202201", "for202201"),
   "2" = c("CAGEDFOR202202", "for202202"),
   "3" = c("CAGEDFOR202203", "for202203"),
