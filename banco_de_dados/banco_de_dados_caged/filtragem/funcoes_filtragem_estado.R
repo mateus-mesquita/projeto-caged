@@ -1,55 +1,48 @@
 library(glue)
 
 # Função para filtragem de registros com 1 variável
-filtragem_1V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
+filtragem_1V <- function(tabela, conexao) {
   
   query <- glue::glue("
-  
-  WITH contagem AS (
-    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY faixa_idade
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY seção
-  )
-  select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
     
   ")
   
@@ -58,117 +51,111 @@ filtragem_1V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
 }
 
 
-filtragem_2V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
+filtragem_2V <- function(conexao,tabela) {
   
   query <- glue::glue("
-  WITH contagem AS(
-    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, faixa_idade
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, faixa_idade
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, faixa_idade
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY faixa_idade, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY graudeinstrução, seção
-  )
-  select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
   
   ")
   
@@ -178,152 +165,146 @@ filtragem_2V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
 
 
 
-filtragem_3V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
+filtragem_3V <- function(conexao,tabela) {
   query <- glue::glue("
   
-  WITH contagem AS(
-    SELECT uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, faixa_idade
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, faixa_idade
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, faixa_idade, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, faixa_idade
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, faixa_idade, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, faixa_idade, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY faixa_idade, graudeinstrução, seção
-  )
-  select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
   ")
   
   df <- DBI::dbGetQuery(conexao, query)
@@ -331,116 +312,110 @@ filtragem_3V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
 }
 
 
-filtragem_4V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
-  query <- glue::glue("
-  WITH contagem AS(
-    SELECT uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS total
+filtragem_4V <- function(conexao,tabela) {
+  query <- glue::glue(" 
+    SELECT uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, faixa_idade
 
   UNION ALL
 
-    SELECT uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, '' AS faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, seção
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, faixa_idade, seção
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, faixa_idade, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, faixa_idade, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, faixa_idade, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, faixa_idade, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY raçacor, faixa_idade, graudeinstrução, seção
-  )
- select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
   ")
   
   df <- DBI::dbGetQuery(conexao, query)
@@ -448,54 +423,48 @@ filtragem_4V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
 }
 
 
-filtragem_5V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
+filtragem_5V <- function(conexao,tabela) {
   query <- glue::glue("
   
-  WITH contagem AS (
-    SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, '' AS seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, faixa_idade, graudeinstrução
 
   UNION ALL
 
-    SELECT uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, faixa_idade, '' AS graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, faixa_idade, seção
 
   UNION ALL
 
-    SELECT uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, '' AS faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, '' AS raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, faixa_idade, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, '' AS sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, raçacor, faixa_idade, graudeinstrução, seção
 
   UNION ALL
 
-    SELECT '' AS uf, sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT '' AS uf, sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY sexo, raçacor, faixa_idade, graudeinstrução, seção
-  )
-  select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
   ")
   
   df <- DBI::dbGetQuery(conexao, query)
@@ -504,18 +473,12 @@ filtragem_5V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
 
 
 
-filtragem_6V <- function(tabela, conexao,local,sexo,raca,idade,gdi,setor) {
+filtragem_6V <- function(conexao,tabela) {
   query <- glue::glue("
-  WITH contagem AS(
-    SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS total
+    SELECT uf, sexo, raçacor, faixa_idade, graudeinstrução, seção, COUNT(*) AS admissoes
     FROM {tabela}
     WHERE tipomovimentação LIKE '%Admissao%' AND uf IN ('CE','PE','BA')
     GROUP BY uf, sexo, raçacor, faixa_idade, graudeinstrução, seção
-  )
-  select total from contagem 
-  WHERE uf = '{local}' AND sexo = '{sexo}' AND raçacor = '{raca}'
-  AND faixa_idade = '{idade}' AND graudeinstrução = '{gdi}' AND
-  seção = '{setor}';
   ")
   
   df <- DBI::dbGetQuery(conexao, query)
@@ -596,3 +559,4 @@ for(local_ in local){
 
 df = filtragem_6V("CAGEDFOR202201",con_for)
 sum(df$`COALESCE(contagem.total, 0)` == 0)
+
