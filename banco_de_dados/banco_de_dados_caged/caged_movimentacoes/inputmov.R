@@ -4,19 +4,15 @@ library(dplyr)
 resultado_bd = RSQLite::dbConnect(SQLite(),"cagedmov.db")
 
 lista = list(
-  "1" = c("CAGEDMOV202201", "cagedmov202201.txt"),
-  "2" = c("CAGEDMOV202202", "cagedmov202202.txt"),
-  "3" = c("CAGEDMOV202203", "cagedmov202203.txt"),
-  "4" = c("CAGEDMOV202204", "cagedmov202204.txt"),
-  "5" = c("CAGEDMOV202205", "cagedmov202205.txt"),
-  "6" = c("CAGEDMOV202206", "cagedmov202206.txt"),
-  "7" = c("CAGEDMOV202207", "cagedmov202207.txt"),
-  "8" = c("CAGEDMOV202208", "cagedmov202208.txt"),
-  "9" = c("CAGEDMOV202209", "cagedmov202209.txt"),
-  "10" = c("CAGEDMOV202210", "cagedmov202210.txt"),
-  "11" = c("CAGEDMOV202211", "cagedmov202211.txt"),
-  "12" = c("CAGEDMOV202212", "cagedmov202212.txt")
+  "6" = c("CAGEDMOV202306", "cagedmov202306.txt"),
+  "7" = c("CAGEDMOV202307", "cagedmov202307.txt"),
+  "8" = c("CAGEDMOV202308", "cagedmov202308.txt"),
+  "9" = c("CAGEDMOV202309", "cagedmov202309.txt"),
+  "10" = c("CAGEDMOV202310", "cagedmov202310.txt"),
+  "11" = c("CAGEDMOV202311", "cagedmov202311.txt"),
+  "12" = c("CAGEDMOV202312", "cagedmov202312.txt")
 )
+
 
 i = 1
 while(i <= 12){
@@ -25,6 +21,6 @@ while(i <= 12){
   df = preprocessamento(arquivo)
   dbWriteTable(resultado_bd,tabela,df,append = TRUE)
   i = i + 1
-  
+  cat("Arquivo",arquivo,"referente a tabela",tabela,'foi executado com sucesso','\n')
 }
-   
+n   
