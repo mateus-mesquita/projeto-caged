@@ -4,7 +4,7 @@ library(sqldf)
 
 # Criando tabela de contagem
 con_mov = RSQLite::dbConnect(SQLite(),"cagedmov.db")
-movimentacao = RSQLite::dbConnect(SQLite(),"movimentacao.db")
+movimentacao = RSQLite::dbConnect(SQLite(),"movimentacao_dados.db")
 
 # Criando tabela de admissoes fora do prazo
 dbExecute(movimentacao,'
