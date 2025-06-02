@@ -91,7 +91,7 @@ def tabela_final_estoque(conexao):
             if len(j) == 1:
                 lista_.append(j[0])
             else:
-                lista_.append(j[0])
+                lista_.append(j)
 
     admissoes_geral = contagem_total_estoque(conexao)
     dados_novos = admissoes_geral.copy()  # cria cópia para acumular
@@ -101,3 +101,13 @@ def tabela_final_estoque(conexao):
         dados_novos = pd.concat([dados_novos, temp], axis=0, ignore_index=True)
 
     return dados_novos
+
+def filtro(dados,local_,sexo_,raca_,idade_,gdi_,setor_,coluna):
+    contagem = dados[(dados['uf'] == local_) &
+                            (dados['sexo'] == sexo_) &
+                            (dados['raçacor'] == raca_) &
+                            (dados['faixa_idade'] == idade_) &
+                            (dados['graudeinstrução'] == gdi_) &
+                            (dados['seção'] == setor_)
+                        ][coluna]
+    return contagem.iloc[0] if len(contagem) > 0 else 0
